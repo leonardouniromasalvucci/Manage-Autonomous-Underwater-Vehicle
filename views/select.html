@@ -1,0 +1,154 @@
+<html>
+<head><title>Chat</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="/socket.io/socket.io.js"></script> 
+
+<style type="text/css">
+@import "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css";
+.box > .icon { 
+    text-align: 
+    center; 
+    position: 
+    relative; 
+    }
+.box > .icon > .image { 
+    position: relative; 
+    z-index: 2; 
+    margin: auto; 
+    width: 88px; 
+    height: 88px; 
+    border: 8px solid white; 
+    line-height: 88px; 
+    border-radius: 50%; 
+    background: #428bca; 
+    vertical-align: middle; 
+    }
+.box > .icon > .image > i { 
+    font-size: 36px !important; 
+    color: #fff !important; 
+    }
+.box > .icon:hover > .image > i { 
+    color: white !important; 
+    }
+.box > .icon > .info { 
+    margin-top: -24px; 
+    background: rgba(0, 0, 0, 0.04); 
+    border: 1px solid #e0e0e0; 
+    padding: 15px 0 10px 0; 
+    }
+.box > .icon > .info > h3.title { 
+    font-family: sans-serif !important; 
+    font-size: 16px; 
+    color: #222; 
+    font-weight: 500; 
+    }
+.box > .icon > .info > p { 
+    font-family: sans-serif !important; 
+    font-size: 13px; 
+    color: #666; 
+    line-height: 1.5em; 
+    margin: 20px;
+    }
+.box > .icon:hover > .info > h3.title, .box > .icon:hover > .info > p, .box > .icon:hover > .info > .more > a { 
+    color: #222; 
+    }
+.box > .icon > .info > .more a { 
+    font-family: sans-serif !important; 
+    font-size: 12px; 
+    color: #222; 
+    line-height: 12px; 
+    text-transform: uppercase; 
+    text-decoration: none; 
+    }
+.box > .icon:hover > .info > .more > a { 
+    color: #fff; 
+    padding: 6px 8px; 
+    background-color: #63B76C; 
+    }
+.box .space { 
+    height: 30px; 
+    }
+
+.modal-header-primary {
+    color:#fff;
+    padding:9px 15px;
+    border-bottom:1px solid #eee;
+    background-color: #428bca;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+     border-top-left-radius: 5px;
+     border-top-right-radius: 5px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <a id="pop" style="display:none;" class="btn btn-primary" href="#primary" data-toggle="modal"></a>
+    <div class="modal fade" id="primary" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> Manage your AUV</h1>
+                </div>
+                <div class="modal-body">
+                <p style="font-size: 18px;text-align: center;margin-top:2%;margin-left:2%;">Add new Autonomous Underwater Vehicle</p>
+                <form action="/add_device" method="get">
+                <button type="submit" style="margin-left:37%;width:25%;height:35px;font-size: 12px;" class="btn btn-primary"><b>ADD DEVICE</b></button>
+                </form>
+                </div>
+                <form id="map" action="/get_dev_map" method="post">
+                <div class="modal-footer">
+                  <div class="modal-body">
+                  <p style="font-size: 15px;">Select a device and start a new mission </p>
+                  <select class="form-control form-control-sm" style="height:30px;font:normal 14px/25px Arial, Sans-Serif;cursor:pointer;" id="Selll" name="Selll">
+                        
+                    </select>
+                    <input type="text" id="lat" name="lat" style="display: none;">
+                    <input type="text" id="long" name="long" style="display: none;">
+                  </div>
+                  
+                </div>
+                <div class="modal-footer">
+                       <div class="btn btn-danger" style="width:80px;height:28px;font-size: 12px;position:left;"><a href="/logout" style="color:white;">Go out</a></div>
+                       <button type="submit" style="position:left;width:80px;height:28px;font-size: 12px;" class="btn btn-success">Confirm</button>
+                </div>
+            </form>                
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+$(document).ready(function () {
+    var socket = io.connect();
+    socket.emit('get_device', "1");
+    socket.on('result_device', function(data){  
+    var vett = [];      
+    var i;
+    for(i=0;i<data.length;i++){
+        if(!vett.includes(data[i].device)){
+           vett.push(data[i].device);
+        }
+    }
+    for(i=0;i<vett.length;i++){
+        document.getElementById('Selll').innerHTML += 
+        '<option>'+vett[i]+'</option>';
+    }
+    document.getElementById('lat').value=data[0].def_lat;
+    document.getElementById('long').value=data[0].def_long;
+      
+    });
+    $('#pop').click(); 
+});
+$('#primary').modal({backdrop: 'static', keyboard: false})  
+
+</script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<html>
+<head><title>AUV-New-device</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<style type="text/css">
+@import "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css";
+.box > .icon { 
+    text-align: 
+    center; 
+    position: 
+    relative; 
+    }
+.box > .icon > .image { 
+    position: relative; 
+    z-index: 2; 
+    margin: auto; 
+    width: 88px; 
+    height: 88px; 
+    border: 8px solid white; 
+    line-height: 88px; 
+    border-radius: 50%; 
+    background: #428bca; 
+    vertical-align: middle; 
+    }
+.box > .icon > .image > i { 
+    font-size: 36px !important; 
+    color: #fff !important; 
+    }
+.box > .icon:hover > .image > i { 
+    color: white !important; 
+    }
+.box > .icon > .info { 
+    margin-top: -24px; 
+    background: rgba(0, 0, 0, 0.04); 
+    border: 1px solid #e0e0e0; 
+    padding: 15px 0 10px 0; 
+    }
+.box > .icon > .info > h3.title { 
+    font-family: sans-serif !important; 
+    font-size: 16px; 
+    color: #222; 
+    font-weight: 500; 
+    }
+.box > .icon > .info > p { 
+    font-family: sans-serif !important; 
+    font-size: 13px; 
+    color: #666; 
+    line-height: 1.5em; 
+    margin: 20px;
+    }
+.box > .icon:hover > .info > h3.title, .box > .icon:hover > .info > p, .box > .icon:hover > .info > .more > a { 
+    color: #222; 
+    }
+.box > .icon > .info > .more a { 
+    font-family: sans-serif !important; 
+    font-size: 12px; 
+    color: #222; 
+    line-height: 12px; 
+    text-transform: uppercase; 
+    text-decoration: none; 
+    }
+.box > .icon:hover > .info > .more > a { 
+    color: #fff; 
+    padding: 6px 8px; 
+    background-color: #63B76C; 
+    }
+.box .space { 
+    height: 30px; 
+    }
+
+.modal-header-primary {
+    color:#fff;
+    padding:9px 15px;
+    border-bottom:1px solid #eee;
+    background-color: #428bca;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+     border-top-left-radius: 5px;
+     border-top-right-radius: 5px;
+}
+input[type="text"]
+{
+    font-size:16px;
+}
+input[type="number"]
+{
+    font-size:16px;
+}
+input[type="file"]
+{
+    font-size:12px;
+    margin-left:10px;
+    position:right;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <a id="pop" style="display:none;" class="btn btn-primary" href="#primary" data-toggle="modal"></a>
+    <div class="modal fade" id="primary" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> ADD NEW DEVICE</h1>
+                </div>
+                <form id="frm1" method="post" action="/get_map">
+                <div class="modal-body">
+                <p style="font-size: 15px;">Add new Autonomous Underwater Vehicle</p>
+                <input type="text" style="margin-top:2%;" class="form-control" id="device" name="device" placeholder="Insert name of device">
+                <input type="text" style="margin-top:2%;width:48%;float:left;" class="form-control" id="lat" name="lat" placeholder="Insert lat of device">
+                <input type="text" style="margin-top:2%;width:52%;" class="form-control" id="long" name="long" placeholder="Insert long of device">
+                </div>
+                <hr/>
+                    
+                    <input type="file" id="fileUpload" name="fileUpload" onchange="openFile(event);" style="margin-left:2%;float:left;"/><p style="color:#428bca;font-size: 14px;">Upload your XML / JSON</p>
+                 
+               
+                <div class="modal-footer">
+                    <div class="btn btn-primary" style="width:80px;height:28px;font-size: 12px;position:left;"><a href="/select" style="color:white;">Back</a></div>
+                                               
+                    <button type="submit" style="width:80px;height:28px;font-size: 12px;" class="btn btn-success">Confirm<a></a></button>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function () {
+    $('#pop').click(); 
+});
+$('#primary').modal({backdrop: 'static', keyboard: false});
+</script>
+<script type="text/javascript">
+  
+            $('input[type=file]').change(function(e){ 
+            e.preventDefault();
+            var selectedFile = document.getElementById('fileUpload').files[0];
+            var fileName = e.target.files[0].name;
+            if(fileName.split('.')[1] == "xml"){
+               var  reader = new FileReader();
+               reader.readAsText(selectedFile);
+                reader.onload=function(e) {
+                  var xmlDoc = $.parseXML(e.target.result);
+                  var name = $(xmlDoc).find('name').text();
+                  var lat = $(xmlDoc).find('latitudine').text();
+                  var long = $(xmlDoc).find('longitudine').text();
+                  $('#device').val(name);
+                  $('#lat').val(lat);
+                  $('#long').val(long);
+                }
+            }else if(fileName.split('.')[1] == "json"){
+                var  reader = new FileReader();
+                reader.readAsText(selectedFile);
+                reader.onload=function(e) {                 
+                  var res1 = JSON.parse(e.target.result);                
+                  var name = res1['name'];
+                  var lat = res1['latitude'];
+                  var long = res1['longitude'];  
+                  $('#device').val(name);
+                  $('#lat').val(lat);
+                  $('#long').val(long);         
+                }            
+            }else{
+                alert("Insert XML or JSON file, please.");
+                document.getElementById("fileUpload").value = "";
+            }
+            reader.readAsText(selectedFile);
+            });
+</script>
+</body>
+</html>

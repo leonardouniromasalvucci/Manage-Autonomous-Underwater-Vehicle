@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AUV-Mission</title>
+    <script src="/socket.io/socket.io.js"></script> 
+    <script src="https://localhost:3000/static/libs/leaflet-src.js"></script>
+    <link rel="stylesheet" href="https://localhost:3000/static/libs/leaflet.css"/>
+
+    <script src="https://localhost:3000/static/src/Leaflet.draw.js"></script>
+    <script src="https://localhost:3000/static/src/Leaflet.Draw.Event.js"></script>
+    <link rel="stylesheet" href="https://localhost:3000/static/src/leaflet.draw.css"/>
+
+    <script src="https://localhost:3000/static/src/Toolbar.js"></script>
+    <script src="https://localhost:3000/static/src/Tooltip.js"></script>
+
+    <script src="https://localhost:3000/static/src/ext/GeometryUtil.js"></script>
+    <script src="https://localhost:3000/static/src/ext/LatLngUtil.js"></script>
+    <script src="https://localhost:3000/static/src/ext/LineUtil.Intersect.js"></script>
+    <script src="https://localhost:3000/static/src/ext/Polygon.Intersect.js"></script>
+    <script src="https://localhost:3000/static/src/ext/Polyline.Intersect.js"></script>
+    <script src="https://localhost:3000/static/src/ext/TouchEvents.js"></script>
+
+    <script src="https://localhost:3000/static/src/draw/DrawToolbar.js"></script>
+    <script src="https://localhost:3000/static/src/draw/handler/Draw.Feature.js"></script>
+    <script src="https://localhost:3000/static/src/draw/handler/Draw.SimpleShape.js"></script>
+    <script src="https://localhost:3000/static/src/draw/handler/Draw.Polyline.js"></script>
+    <script src="https://localhost:3000/static/src/draw/handler/Draw.Marker.js"></script>
+    <script src="https://localhost:3000/static/src/draw/handler/Draw.Circle.js"></script>
+    <script src="https://localhost:3000/static/src/draw/handler/Draw.CircleMarker.js"></script>
+    <script src="https://localhost:3000/static/src/draw/handler/Draw.Polygon.js"></script>
+    <script src="https://localhost:3000/static/src/draw/handler/Draw.Rectangle.js"></script>
+
+
+    <script src="https://localhost:3000/static/src/edit/EditToolbar.js"></script>
+    <script src="https://localhost:3000/static/src/edit/handler/EditToolbar.Edit.js"></script>
+    <script src="https://localhost:3000/static/src/edit/handler/EditToolbar.Delete.js"></script>
+
+    <script src="https://localhost:3000/static/src/Control.Draw.js"></script>
+
+    <script src="https://localhost:3000/static/src/edit/handler/Edit.Poly.js"></script>
+    <script src="https://localhost:3000/static/src/edit/handler/Edit.SimpleShape.js"></script>
+    <script src="https://localhost:3000/static/src/edit/handler/Edit.Rectangle.js"></script>
+    <script src="https://localhost:3000/static/src/edit/handler/Edit.Marker.js"></script>
+    <script src="https://localhost:3000/static/src/edit/handler/Edit.CircleMarker.js"></script>
+    <script src="https://localhost:3000/static/src/edit/handler/Edit.Circle.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+ 
+    <style type="text/css">
+
+    @import "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css";
+    .box > .icon { 
+    text-align: 
+    center; 
+    position: 
+    relative; 
+    }
+    .box > .icon > .image { 
+    position: relative; 
+    z-index: 2; 
+    margin: auto; 
+    width: 88px; 
+    height: 88px; 
+    border: 8px solid white; 
+    line-height: 88px; 
+    border-radius: 50%; 
+    background: #428bca; 
+    vertical-align: middle; 
+    }
+    .box > .icon > .image > i { 
+    font-size: 36px !important; 
+    color: #fff !important; 
+    }
+    .box > .icon:hover > .image > i { 
+    color: white !important; 
+    }
+    .box > .icon > .info { 
+    margin-top: -24px; 
+    background: rgba(0, 0, 0, 0.04); 
+    border: 1px solid #e0e0e0; 
+    padding: 15px 0 10px 0; 
+    }
+    .box > .icon > .info > h3.title { 
+    font-family: sans-serif !important; 
+    font-size: 16px; 
+    color: #222; 
+    font-weight: 500; 
+    }
+    .box > .icon > .info > p { 
+    font-family: sans-serif !important; 
+    font-size: 13px; 
+    color: #666; 
+    line-height: 1.5em; 
+    margin: 20px;
+    }
+    .box > .icon:hover > .info > h3.title, .box > .icon:hover > .info > p, .box > .icon:hover > .info > .more > a { 
+    color: #222; 
+    }
+    .box > .icon > .info > .more a { 
+    font-family: sans-serif !important; 
+    font-size: 12px; 
+    color: #222; 
+    line-height: 12px; 
+    text-transform: uppercase; 
+    text-decoration: none; 
+    }
+    .box > .icon:hover > .info > .more > a { 
+    color: #fff; 
+    padding: 6px 8px; 
+    background-color: #63B76C; 
+    }
+    .box .space { 
+    height: 30px; 
+    }
+
+    .modal-header-primary {
+    color:#fff;
+    padding:9px 15px;
+    border-bottom:1px solid #eee;
+    background-color: #428bca;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+     border-top-left-radius: 5px;
+     border-top-right-radius: 5px;
+    }
+
+    div[class="leaflet-control-container"]{
+    position:absolute;
+    top:40%;
+    }
+
+    a[class="leaflet-draw-draw-rectangle"] {
+    display: none;
+    }
+    a[class="leaflet-draw-draw-marker"] {
+    display: none;
+    }
+    a[class="leaflet-draw-draw-polyline"] {
+    display: none;
+    }
+    a[class="leaflet-draw-draw-polygon"] {
+    display: none;
+    }
+    a[class="leaflet-draw-draw-circle"] {
+    display: none;
+    }
+    a[class="leaflet-draw-draw-circlemarker"] {
+    display: none;
+    }
+    div[class="leaflet-control-zoom leaflet-bar leaflet-control"]{
+    display: none;
+    }
+    div[class="leaflet-draw-edit-remove"]{
+    display: none;
+    }
+    div[class="leaflet-draw-edit-remove leaflet-disabled"]{
+    display: none;
+    }
+    div[class="sr-only"]{
+    display: none;
+    }
+    div[class="leaflet-control-layers leaflet-control-layers-expanded leaflet-control"]{
+    display: none;
+    }
+    div[class="update"]{
+    position:absolute;
+    z-index: 99;
+    content: url(https://cdn4.iconfinder.com/data/icons/basic-ui-elements/700/01_arrow_up-128.png) !important;
+    width:23.2px;
+    height:24px;
+    margin-left:1px;
+    border: 1px solid #808080;
+    border-radius:6px;
+    cursor: pointer;
+    top:60%;
+    left:11px;
+    }
+    div[class="leaflet-draw leaflet-control"]{
+    display: none;
+    }
+    .tbody div {
+    overflow:scroll;
+    height:300px;
+    }
+    </style>  
+</head>
+<body>
+<div class="container">
+    <a id="pop" style="display:none;" class="btn btn-primary" href="#primary" data-toggle="modal"></a>
+    <div class="modal fade" id="primary" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> State of Device</h1>
+                </div>
+                <p style="float:left;font-size:14px; margin-left:2%;margin-top:2%;">Device's state: <a style="color:red;font-size:14px;" id="state"><b> </b></a></p>
+                <div class="modal-footer">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Device name</th>
+                            <th scope="col">User email</th>
+                            <th scope="col">Date upload</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bdy">
+                       
+                    </tbody>
+                </table>
+                </div>
+                <div class="modal-footer">
+                       <div class="btn btn-danger" style="width:80px;height:28px;font-size: 12px;position:left;"><a href="/logout" style="color:white;">Go out</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <a id="pop2" style="display:none;" class="btn btn-primary" href="#second" data-toggle="modal"></a>
+    <!-- Modal -->
+    <div class="modal fade" id="second" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:85%;margin-left:11%;">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> Rows</h1>
+                </div>
+                <form id="rows" action="#" style="margin-left:3%;margin-top:3%;margin-right:3%;">
+                  <div class="form-group">
+                    <label for="sel1">Basic info ( <a href="#" onClick="getPoint();" style="cursor:pointer;">Select in the map</a> ):</label>
+                    <input type="text" class="form-control" id="vert1" size="10" style="margin-top:2%;font-size:14px;"  placeholder="Latitude first point">
+                    <input type="text" class="form-control" id="oriz1" size="10" style="margin-top:2%;font-size:14px;" placeholder="Longitude first point">
+                    <input type="text" class="form-control" id="vert2" size="10" style="margin-top:2%;font-size:14px;"  placeholder="Latitude second point">
+                    <input type="text" class="form-control" id="oriz2" size="10" style="margin-top:2%;font-size:14px;" placeholder="Longitude second point">
+                    <input type="text" class="form-control" id="vert3" size="10" style="margin-top:2%;font-size:14px;"  placeholder="Latitude third point">
+                    <input type="text" class="form-control" id="oriz3" size="10" style="margin-top:2%;font-size:14px;" placeholder="Longitude third point">
+                    <input type="text" class="form-control" id="vert4" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;"  placeholder="Latitude fourth point">
+                    <input type="text" class="form-control" id="oriz4" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;" placeholder="Longitude fourth point">
+                    <div class="form-group" style="margin-top:3%;">
+                      <label for="sel1">Distance info:</label>
+                      <input type="text" class="form-control" id="first" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;" placeholder="Distance firt segment">
+                      <input type="text" class="form-control" id="secondss" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;"  placeholder="Distance second segment">
+                   </div>
+                   <div class="form-group" style="margin-top:3%;">
+                      <label for="sel1">Track info:</label>
+                      <input type="text" onKeyUp="getNum();" class="form-control" id="dist" style="margin-top:2%;font-size:14px;" placeholder="Track spacing">
+                      <input type="number" class="form-control" id="ff" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;float:left;width:50%;"  placeholder="Across Tracks">
+                      <input type="number" class="form-control" id="ss" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;width:50%;"  placeholder="Across Tracks">
+                   </div>
+                 </div>
+                 <button type="submit" class="btn btn-success" style="margin-left:40%;margin-bottom:2%;width:80px;font-size:12px;height:30px;" >Confirm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <a id="pop3" style="display:none;" class="btn btn-primary" href="#three" data-toggle="modal"></a>
+
+    <div class="modal fade" id="three" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:80%;margin-left:10%;">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> StationKeeping</h1>
+                </div>
+                <form id="station" action="#" style="margin-left:3%;margin-top:3%;margin-right:3%;">
+                  <div class="form-group">
+                    <div class="form-group">
+                    <label for="sel1">Basic info:</label>
+                    <input type="text" class="form-control" id="lt" size="10" style="font-size:14px;" readonly="readonly" placeholder="Latitude">
+                    <input type="text" class="form-control" id="lng" size="10" style="margin-top:2%;font-size:14px;" readonly="readonly" placeholder="Longitude">
+                    <input type="number" class="form-control" id="duration" size="10" style="margin-top:2%;font-size:14px;" placeholder="Duration">
+                    <input type="number" class="form-control" id="radius" required size="10" style="margin-top:2%;font-size:14px;" placeholder="Radius">
+                    <div class="form-group" style="margin-top:3%;">
+                        <label for="sel1">Z Units:</label>
+                        <select class="form-control" id="sel1" style="width:100%;">
+                            <option>DEPTH</option>
+                            <option>ALTITUDE</option>
+                        </select>
+                        <input type="number" class="form-control" id="units" size="10" style="margin-top:2%;font-size:14px;" placeholder="Specify the unit">
+                    </div>
+                    <div class="form-group" style="margin-top:3%;">
+                        <label for="sel1">Speed Units:</label>
+                        <select class="form-control" id="sel2" style="width:100%;">
+                            <option>METERS_PS</option>
+                            <option>RPM</option>
+                            <option>PERCENTAGE</option>
+                        </select>
+                        <input type="number" class="form-control" id="speeds" size="10" style="margin-top:2%;font-size:14px;" placeholder="Specify the speed">
+                    </div>
+                   </div>
+                   <button type="submit" id="btnn" class="btn btn-success" style="margin-left:40%;margin-bottom:2%;width:80px;font-size:14px;height:30px;" >Confirm</button>
+                </form>               
+          </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <a id="pop4" style="display:none;" class="btn btn-primary" href="#for" data-toggle="modal"></a>
+
+    <div class="modal fade" id="for" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:80%;margin-left:10%;">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> GoTo</h1>
+                </div>
+                <form id="goto" action="#" style="margin-left:3%;margin-top:3%;margin-right:3%;">
+                  <div class="form-group">
+                    <label for="sel1">Basic info:</label>
+                    <input type="text" class="form-control" id="lats" size="10" style="font-size:14px;"  placeholder="Latitude">
+                    <input type="text" class="form-control" id="longs" size="10" style="margin-top:2%;font-size:14px;" placeholder="Longitude">
+                    <input type="number" class="form-control" id="times" size="10" onKeyUp="mainInfo(this.value);" onchange="mainInfo1(this.value);" style="margin-top:2%;font-size:14px;" placeholder="Timeout (max 65535)" required>
+                    <div id="space"></div>
+                    <div class="form-group" style="margin-top:3%;">
+                        <label for="sel1">Z Units:</label>
+                        <select class="form-control" id="unit" style="width:100%;">
+                            <option>DEPTH</option>
+                            <option>ALTITUDE</option>
+                        </select>
+                        <input type="number" class="form-control" id="z_unit" size="10" style="margin-top:2%;font-size:14px;" placeholder="Specify the unit">
+                    </div>
+                    <div class="form-group" style="margin-top:3%;">
+                        <label for="sel1">Speed Units:</label>
+                        <select class="form-control" id="speed" style="width:100%;">
+                            <option>METERS_PS</option>
+                            <option>RPM</option>
+                            <option>PERCENTAGE</option>
+                        </select>
+                        <input type="number" class="form-control" id="z_speed" size="10" style="margin-top:2%;font-size:14px;" placeholder="Specify the speed">
+                    </div>
+                   </div>
+                   <button type="submit" class="btn btn-success" style="margin-left:40%;margin-top:2%;margin-bottom:2%;width:80px;font-size:14px;height:30px;" >Confirm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <a id="pop5" style="display:none;" class="btn btn-primary" href="#five" data-toggle="modal"></a>
+
+    <div class="modal fade" id="five" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:80%;margin-left:10%;">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> Edit / Remove</h1>
+                </div>
+                <form id="" action="#" style="margin-left:3%;margin-top:3%;margin-right:3%;">
+                  <div class="form-group">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col" >Type</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                             
+                                <th scope="col">Edit</th>
+                                                            
+                                <th scope="col">Remove</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody id="tbd">                       
+                        </tbody>
+                    </table>
+                   </div>
+                   <button type="submit" class="btn btn-primary" style="margin-left:40%;margin-top:2%;margin-bottom:2%;width:80px;font-size:14px;height:30px;" onclick="closeP();">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <a id="pop6" style="display:none;" class="btn btn-primary" href="#six" data-toggle="modal"></a>
+
+    <div class="modal fade" id="six" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:82%;margin-left:10%;">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> Edit GoTo</h1>
+                </div>
+                <form id="e_g" action="#" style="margin-left:3%;margin-top:3%;margin-right:3%;">
+                  <div class="form-group">
+                    <label for="sel1">Basic info:</label>
+                    <input type="text" class="form-control" id="latss" size="10" style="font-size:14px;"  placeholder="Latitude">
+                    <input type="text" class="form-control" id="longss" size="10" style="margin-top:2%;font-size:14px;" placeholder="Longitude">
+                    <input type="number" class="form-control" id="timess" size="10" onKeyUp="mainInfoo(this.value);" onchange="mainInfo2(this.value);" style="margin-top:2%;font-size:14px;" placeholder="Timeout (max 65535)" required>
+                    <div id="spaces"></div>
+                    <div class="form-group" style="margin-top:3%;">
+                        <label for="sel1">Z Units:</label>
+                        <select class="form-control" id="xsc" style="width:100%;">
+                            <option value='DEPTH'>DEPTH</option>
+                            <option value='ALTITUDE'>ALTITUDE</option>
+                        </select>
+                        <input type="number" class="form-control" id="z_units" size="10" style="margin-top:2%;font-size:14px;" placeholder="Specify the unit">
+                    </div>
+                    <div class="form-group" style="margin-top:3%;">
+                        <label for="sel1">Speed Units:</label>
+                        <select class="form-control" id="esr" style="width:100%;">
+                            <option  value='METERS_PS'>METERS_PS</option>
+                            <option  value='RPM'>RPM</option>
+                            <option  value='PERCENTAGE'>PERCENTAGE</option>
+                        </select>
+                        <input type="number" class="form-control" id="z_speeds" size="10" style="margin-top:2%;font-size:14px;" placeholder="Specify the speed">
+                         <input type="text" id="x" style="display: none;">
+                    </div>
+                   </div>
+                   <div class="col-md-12 text-center">
+                   <button type="submit" class="btn btn-success" style="margin-top:2%;margin-bottom:2%;width:80px;font-size:14px;height:30px;" >Confirm</button>
+                   </div>
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <a id="pop7" style="display:none;" class="btn btn-primary" href="#seven" data-toggle="modal"></a>
+
+    <div class="modal fade" id="seven" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:80%;margin-left:10%;">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> Edit StationKeeping</h1>
+                </div>
+                <form id="e_s" style="margin-left:3%;margin-top:3%;margin-right:3%;">
+                  <div class="form-group">
+                    <div class="form-group">
+                    <label for="sel1">Basic info:</label>
+                    <input type="text" class="form-control" id="1" size="10" style="font-size:14px;" readonly="readonly" placeholder="Latitude">
+                    <input type="text" class="form-control" id="2" size="10" style="margin-top:2%;font-size:14px;" readonly="readonly" placeholder="Longitude">
+                    <input type="number" class="form-control" id="3" size="10" style="margin-top:2%;font-size:14px;" placeholder="Duration">
+                    <input type="number" class="form-control" id="4" required size="10" style="margin-top:2%;font-size:14px;" placeholder="Radius">
+                    <div class="form-group" style="margin-top:3%;">
+                        <label for="sel1">Z Units:</label>
+                        <select class="form-control" id="5" style="width:100%;">
+                            <option value="DEPTH">DEPTH</option>
+                            <option value="ALTITUDE">ALTITUDE</option>
+                        </select>
+                        <input type="number" class="form-control" id="6" size="10" style="margin-top:2%;font-size:14px;" placeholder="Specify the unit">
+                    </div>
+                    <div class="form-group" style="margin-top:3%;">
+                        <label for="sel1">Speed Units:</label>
+                        <select class="form-control" id="7" style="width:100%;">
+                            <option value="METERS_PS">METERS_PS</option>
+                            <option value="RPM">RPM</option>
+                            <option value="PERCENTAGE">PERCENTAGE</option>
+                        </select>
+                        <input type="number" class="form-control" id="8" size="10" style="margin-top:2%;font-size:14px;" placeholder="Specify the speed">
+                         <input type="text" id="y" style="display: none;">
+                    </div>
+                   </div>
+                
+                   <div class="col-md-12 text-center">
+                   <button type="submit" class="btn btn-success" style="margin-top:2%;margin-bottom:2%;width:80px;font-size:14px;height:30px;" >Confirm</button>
+                   </div>
+                   
+                </form>               
+          </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <a id="pop8" style="display:none;" class="btn btn-primary" href="#height" data-toggle="modal"></a>
+
+    <div class="modal fade" id="height" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:85%;margin-left:11%;">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> Edit Rows</h1>
+                </div>
+                <form id="e_r" style="margin-left:3%;margin-top:3%;margin-right:3%;">
+                  <div class="form-group">
+                    <label for="sel1">Basic info ( <a href="#" onClick="getPoint();" style="cursor:pointer;">Select in the map</a> ):</label>
+                    <input type="text" class="form-control" id="11" size="10" style="margin-top:2%;font-size:14px;"  placeholder="Latitude first point">
+                    <input type="text" class="form-control" id="12" size="10" style="margin-top:2%;font-size:14px;" placeholder="Longitude first point">
+                    <input type="text" class="form-control" id="13" size="10" style="margin-top:2%;font-size:14px;"  placeholder="Latitude second point">
+                    <input type="text" class="form-control" id="14" size="10" style="margin-top:2%;font-size:14px;" placeholder="Longitude second point">
+                    <input type="text" class="form-control" id="15" size="10" style="margin-top:2%;font-size:14px;"  placeholder="Latitude third point">
+                    <input type="text" class="form-control" id="16" size="10" style="margin-top:2%;font-size:14px;" placeholder="Longitude third point">
+                    <input type="text" class="form-control" id="17" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;"  placeholder="Latitude fourth point">
+                    <input type="text" class="form-control" id="18" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;" placeholder="Longitude fourth point">
+                    <div class="form-group" style="margin-top:3%;">
+                      <label for="sel3">Distance info:</label>
+                      <input type="text" class="form-control" id="19" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;" placeholder="Distance firt segment">
+                      <input type="text" class="form-control" id="20" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;"  placeholder="Distance second segment">
+                   </div>
+                   <div class="form-group" style="margin-top:3%;">
+                      <label for="sel3">Track info:</label>
+                      <input type="text" onKeyUp="getNum2();" class="form-control" id="21" required style="margin-top:2%;font-size:14px;" placeholder="Track spacing">
+                      <input type="number" class="form-control" id="22" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;float:left;width:50%;"  placeholder="Across Tracks">
+                      <input type="number" class="form-control" id="23" readonly="readonly" size="10" style="margin-top:2%;font-size:14px;width:50%;"  placeholder="Across Tracks">
+                       <input type="text" id="z" style="display: none;">
+                   </div>
+                 </div>
+               
+                 <div class="col-md-12 text-center">
+                   <button type="submit" class="btn btn-success" style="margin-top:2%;margin-bottom:2%;width:80px;font-size:14px;height:30px;" >Confirm</button>
+                   </div>
+                 
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <a id="pop9" style="display:none;" class="btn btn-primary" href="#nine" data-toggle="modal"></a>
+
+    <div class="modal fade" id="nine" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:80%;margin-left:10%;">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> Confirmation</h1>
+                </div>
+                <form id="" action="#" style="margin-left:3%;margin-top:3%;margin-right:3%;">
+                  <div class="form-group">
+
+                   <p style="font-size:15px;" id="p_text"> </p>
+                   </div>
+                   <div id="btns">
+                
+                   </div>
+                   </div>
+        
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <a id="pop10" style="display:none;" class="btn btn-primary" href="#ten" data-toggle="modal"></a>
+
+    <div class="modal fade" id="ten" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:80%;margin-left:10%;">
+                <div class="modal-header modal-header-primary">
+                  <h1><i class="fa fa-bar-chart-o"></i> Mission sent</h1>
+                </div>
+                <form action="/select" style="margin-left:3%;margin-top:3%;margin-right:3%;">
+                  <div class="form-group">
+                    <p style="font-size:15px;">Your mission has been archived correctly</p>
+                    <button type="submit" class="btn btn-primary" style="margin-top:2%;margin-left:35%;margin-bottom:2%;width:130px;font-size:14px;height:30px;">NEW MISSION</button>
+                         
+                 </div>        
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="map" style="position:absolute;width:100%; top:0px;left:0px;height: 100%; border: 1px solid #ccc;" title="">
+    <button class="btn btn-primary" title="GoTo" style="position:absolute;z-index: 314159;top:15%;width:55px;height:45px;cursor: pointer;background-color: rgb(0, 0, 0);border:none;color:white;opacity:0.6;text-align:center;" onclick="segment();"><b>GoTo</b></button><br/>
+    <button class="btn btn-primary" title="StationKeeping" style="position:absolute;z-index: 314159;width:55px;height:45px;top:25%;cursor: pointer;background-color: rgb(0, 0, 0);border:none;color:white;opacity:0.6;text-align:center;" onclick="popup3();"><b>Station</b></button><br/>
+    <button class="btn btn-primary" title="Rows" style="position:absolute;z-index: 314159;width:55px;top:35%;height:45px;cursor: pointer;background-color: rgb(0, 0, 0);border:none;color:white;opacity:0.6;text-align:center;" onclick="popup2();"><b>Rows</b></button><br/>
+    <button class="btn btn-primary" title="Reset" style="position:absolute;z-index: 314159;width:55px;top:45%;height:45px;cursor: pointer;background-color: rgb(0, 0, 0);border:none;color:white;opacity:0.6;text-align:center;" onclick="reset();"><b>Reset</b></button><br/>
+    <button class="btn btn-primary" title="Edit" style="position:absolute;z-index: 314159;width:55px;top:55%;height:45px;cursor: pointer;background-color: rgb(0, 0, 0);border:none;color:white;opacity:0.6;text-align:center;" onclick="edit();"><b>Edit</b></button><br/>
+    <button class="btn btn-success" title="Update" style="position:absolute;width:55px;z-index: 314159;top:68%;height:45px;cursor: pointer;" onclick="result();"><b>Upload</b></button><br/>
+  
+    <button id="bbb" class="btn btn-primary" style="position:absolute;top:1%;left:1%;z-index: 314159;opacity:0.6;text-align:center;
+    border-radius: 8px;background-color: rgb(0, 0, 0);border:none;width:170px;height:30px;cursor:pointer;color:white;"><b id="bbb">Latitude / Longitude </b></button>
+</div>
+
+<script>
+    
+    var email = "<%= email %>";  
+    var device = "<%= device %>";
+    var lat = "<%= lat %>";
+    var long = "<%= long %>";    
+
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            osm = L.tileLayer(osmUrl, { maxZoom:26}),
+            map = new L.Map('map', { center: new L.LatLng(lat, long), zoom: 14 }),
+            drawnItems = L.featureGroup().addTo(map);
+    L.control.layers({
+        'osm': osm.addTo(map),
+        "google": L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
+            attribution: 'google'
+        })
+    }, { 'drawlayer': drawnItems }, { position: 'topleft', collapsed: false }).addTo(map);
+    map.addControl(new L.Control.Draw({
+        edit: {
+            featureGroup: drawnItems,
+            poly: {
+                allowIntersection: false
+            }
+        },
+        draw: {
+            polygon: {
+                allowIntersection: false,
+                showArea: true
+            }
+        }
+    }));
+  
+    var socket = io.connect();
+    var mosse = [];   
+
+    function popup(){
+
+    	socket.emit('get_mosse_pop', device);
+      	socket.on('result_mosse', function(data){
+      		document.getElementById('bdy').innerHTML = "";
+      	    var i, inc=1;
+      	    var bool=false;
+      	    for(i=0;i<data.length;i++){
+      	      if(data[i].device==device){
+      	      	bool=true;
+      	      	document.getElementById('bdy').innerHTML += '<tr>'+
+                        '<th scope="row" style="margin-top:3%;">'+inc+'</th>'+
+                        '<td><b>'+data[i].device+'</b></td>'+
+                        '<th>'+data[i].user+'</th>'+
+                        '<th>'+data[i].data+'</th>'+
+                        '<th></th>'+
+                        '</tr>';
+                inc++;
+
+      	      }
+      	    }
+      	    if(bool){
+                document.getElementById("state").innerHTML='<b>In mission</b>';
+      	    }else{
+      	      	document.getElementById("state").innerHTML='<b>Free</b>';
+      	    }
+      
+        });
+        $('#pop').click();
+    }
+    function controlla1(){
+        var t = $('#timess').val();
+        if(t>65535){
+            alert("Valore massimo consentito: 65535");
+            $('#timess').val("");
+        }
+    }
+    function controlla2(){
+        var t = $('#times').val();
+        if(t>65535){
+            alert("Valore massimo consentito: 65535");
+            $('#times').val("");
+        }
+    }
+    
+    function popup2(){
+        $("#map").attr('title', '');
+        $('#pop2').click();         
+    }
+    function getPoint(){
+        $('#pop2').click(); 
+        var inc=0;
+        map.on('click', function(e) {
+            inc++;
+            if(inc==1){
+               $('#vert1').val(e.latlng.lat);
+               $('#oriz1').val(e.latlng.lng);
+            }else if(inc==2){
+               $('#vert2').val(e.latlng.lat);
+               $('#oriz2').val(e.latlng.lng);
+            }else if(inc==3){
+               $('#vert3').val(e.latlng.lat);
+               $('#oriz3').val(e.latlng.lng);
+               var lat1 = $("#vert1").val(), long1 = $("#oriz1").val();
+               var lat2 = $("#vert2").val(), long2 = $("#oriz2").val();
+               var lat3 = $("#vert3").val(), long3 = $("#oriz3").val();
+               var a = parseFloat(lat1) - parseFloat(lat2);
+               var b = parseFloat(long1) - parseFloat(long2);
+               var f = Math.sqrt( (a*a) + (b*b) );
+               var aa = parseFloat(lat2) - parseFloat(lat3);
+               var bb = parseFloat(long2) - parseFloat(long3);
+               var ff = Math.sqrt( (aa*aa) + (bb*bb) );
+               $("#first").val(f);
+               $("#secondss").val(ff);
+
+               var Xm = (parseFloat(lat1)+parseFloat(lat3))/2;
+               var Ym = (parseFloat(long1)+parseFloat(long3))/2;
+               var lat4 = (2*Xm)-parseFloat(lat2);
+               var long4 = (2*Ym)-parseFloat(long2);
+               $("#vert4").val(lat4);
+               $("#oriz4").val(long4);
+
+               $('#pop2').click(); 
+            }else{} 
+        });
+    }
+   
+    function getNum(){
+        var num = $("#dist").val();
+        var first = $("#first").val();
+        var second = $("#secondss").val();
+        var a = parseInt(first/num);
+        var b = parseInt(second/num);
+        $("#ff").val(a);
+        $("#ss").val(b);
+    }
+     function getNum2(){
+        var num = $("#21").val();
+        var first = $("#19").val();
+        var second = $("#20").val();
+        var a = parseInt(first/num);
+        var b = parseInt(second/num);
+        $("#22").val(a);
+        $("#23").val(b);
+    }
+    class Griglia {
+      constructor(lat,long){
+       this.lat = lat;
+       this.long = long;
+      }
+    }
+
+    class GoTo {
+      constructor(type,latitude,longitude,timeout, z_units, z_reference, speed_unit, speed_reference){
+       this.type = type;
+       this.latitude = latitude;
+       this.longitude = longitude;
+       this.timeout = timeout;
+       this.z_units = z_units;
+       this.z_reference = z_reference;
+       this.speed_unit = speed_unit;
+       this.speed_reference = speed_reference;
+      }
+      
+    }
+    class Station {
+      constructor(type,latitude,longitude,duration, z_units, z_reference, speed_unit, speed_reference, radius){
+       this.type = type;
+       this.latitude = latitude;
+       this.longitude = longitude;
+       this.duration = duration;
+       this.z_units = z_units;
+       this.z_reference = z_reference;
+       this.speed_unit = speed_unit;
+       this.speed_reference = speed_reference;
+       this.radius = radius;
+      }
+       setLat(lat){
+         return this.latitude = lat;
+       }
+        setLong(long){
+         return this.longitude = long;
+       }
+       setRadius(rad){
+         return this.radius = rad;
+       }
+    }
+    class Rows {
+       constructor(type,array, track_spacing,point){
+       this.type = type;
+       this.array = array;
+       this.track_spacing = track_spacing;
+       this.point = point;
+      }
+    }
+
+
+    map.on('mousemove', function(e) {
+       $('#bbb').text(e.latlng);
+    });
+   
+    function segment(){
+      $("#map").attr('title', 'DoubleClick in the point');
+        
+      map.on('dblclick', function(e) {
+       $('#pop4').click();
+       $('#lats').val(e.latlng.lat);
+       $('#longs').val(e.latlng.lng);
+      });
+    }
+    $("#rows").submit(function(event) {
+      $('#pop2').click(); 
+      var lat1 = $("#vert1").val(), long1 = $("#oriz1").val();
+      var lat2 = $("#vert2").val(), long2 = $("#oriz2").val();
+      var lat3 = $("#vert3").val(), long3 = $("#oriz3").val();
+      var lat4 = $("#vert4").val(), long4 = $("#oriz4").val();
+
+      var point = [];
+      point.push(new Griglia(lat1,long1));
+      point.push(new Griglia(lat2,long2));
+      point.push(new Griglia(lat3,long3));
+    
+      var d1 = $("#first").val();
+      d1 = parseFloat(d1);
+      var s1 = $("#secondss").val();
+      s1 = parseFloat(s1);
+      var dist = $("#dist").val();
+      dist = parseFloat(dist);
+      var dd = parseFloat(dist);
+      var num = $("#ff").val();
+      num = parseFloat(num);
+      var num2 = $("#ss").val();
+      num2 = parseFloat(num2);
+         
+      var greenIcon = L.icon({
+      iconUrl: 'https://cdn2.iconfinder.com/data/icons/color-svg-vector-icons-2/512/map_marker_base-512.png',
+      iconSize:     [30, 30],
+      iconAnchor:   [34, 35]   
+      });
+      
+      var lat0, long0;
+      if(mosse.length>0){
+        lat0 = mosse[mosse.length-1].latitude;
+        long0 = mosse[mosse.length-1].longitude;
+      }else{
+        lat0 = lat;
+        long0 = long;
+      }
+      var coor = [];
+      coor.push([lat0,long0]);
+      coor.push([lat1,long1]);
+          
+      var oriz_1 = [];
+      var i;
+      for(i=0; i<num; i++){
+        var pX = parseFloat(lat1 - ((dist*(lat1-lat2))/d1));
+        var pY = parseFloat(long1 - ((dist*(long1-long2))/d1));
+        oriz_1.push(new Griglia(pX,pY));
+        dist+=dd;
+      }
+
+
+      var vert_1 = [];
+      var dist = $("#dist").val();
+      dist = parseFloat(dist);
+      var j;
+      for(j=0; j<num2; j++){
+        var pX = parseFloat(lat2 - ((dist*(lat2-lat3))/s1));
+        var pY = parseFloat(long2 - ((dist*(long2-long3))/s1));
+        vert_1.push(new Griglia(pX,pY));
+        dist+=dd;
+      }
+
+
+
+      var oriz_2 = [];
+      var dist = $("#dist").val();
+      dist = parseFloat(dist);
+      var z;
+      for(z=0; z<num; z++){
+        var pX = parseFloat(lat4 - ((dist*(lat4-lat3))/d1));
+        var pY = parseFloat(long4 - ((dist*(long4-long3))/d1));
+        oriz_2.push(new Griglia(pX,pY));
+        dist+=dd;
+      }
+
+
+      var vert_2 = [];
+      var dist = $("#dist").val();
+      dist = parseFloat(dist);
+      var k;
+      for(k=0; k<num2; k++){
+        var pX = parseFloat(lat1 - ((dist*(lat1-lat4))/s1));
+        var pY = parseFloat(long1 - ((dist*(long1-long4))/s1));
+        vert_2.push(new Griglia(pX,pY));
+        dist+=dd;
+      }
+
+      var q;
+      coor.push([lat4,long4]);
+      for(q=0;q<num; q++){
+        if(q%2==0){
+           coor.push([oriz_2[q].lat,oriz_2[q].long]);
+           coor.push([oriz_1[q].lat, oriz_1[q].long]);
+        }else{
+           coor.push([oriz_1[q].lat,oriz_1[q].long]);
+           coor.push([oriz_2[q].lat, oriz_2[q].long]);
+        }
+      }
+      if(num%2==0){
+        coor.push([lat3,long3]);
+      }else{
+        coor.push([lat2,long2]);
+      }
+
+    var z;
+    if(num%2==0){
+        if(num2%2!=0){
+            for(z=num2-1;z>=0; z--){
+              if(z%2==0){
+                //alert(z);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+              }else{
+                //alert(z);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+              }
+            }
+            coor.push([lat1,long1]);
+            coor.push([lat2,long2]);
+        }else{
+            for(z=num2-1;z>=0; z--){
+              if(z%2==0){
+                //alert(z);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+              }else{
+                //alert(z);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+              }
+            }
+            coor.push([lat2,long2]);
+        }              
+    }else{
+        if(num2%2!=0){
+            for(z=0;z<num2; z++){
+              if(z%2==0){
+                //alert(z);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+              }else{
+                //alert(z);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+              }
+            }
+            coor.push([lat4,long4]);
+            coor.push([lat3,long3]);
+        }else{
+            for(z=0;z<num2; z++){
+              if(z%2==0){
+                //alert(z);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+              }else{
+                //alert(z);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+              }
+            }
+            coor.push([lat3,long3]);
+        }          
+    }
+      
+    var p = L.polyline(coor,{color: 'red',weight: 3, opacity: 0.5, smoothFactor: 1}).addTo(map);
+    map.fitBounds(p.getBounds());
+
+    map.eachLayer(function(layer) {
+        if(layer instanceof L.Polyline){
+          drawnItems.addLayer(layer);
+        }                   
+    }); 
+    
+    var distanza = $("#dist").val();
+    distanza = parseFloat(distanza);
+    mosse.push(new Rows("Row",coor, distanza, point));
+      
+    setTimeout(function(){
+        $("#vert1").val("");
+        $("#oriz1").val("");
+        $("#vert2").val("");
+        $("#oriz2").val("");
+        $("#vert3").val("");
+        $("#oriz3").val("");
+        $("#vert4").val("");
+        $("#oriz4").val("");
+        $("#first").val("");
+        $("#dist").val("");
+        $("#secondss").val("");
+        $("#ff").val("");
+        $("#ss").val("");
+      }, 2000);
+
+      return false;
+    });
+
+
+    $("#station").submit(function(event) {
+
+      var lats = $("#lt").val();
+      var longs = $("#lng").val();
+      var times = $("#duration").val();
+      var unit = $("#sel1").val();
+      var z_unit = $("#units").val();
+      var speed = $("#sel2").val();
+      var z_speed = $("#speeds").val();
+      var radius = $("#radius").val();
+     
+      mosse.push(new Station("StationKeeping",lats,longs,times,unit,z_unit,speed,z_speed, radius));
+     
+      L.circle([parseFloat(lats), parseFloat(longs)], radius).addTo(map);  
+    
+      $("#pop3").click();
+      return false;
+    });
+        
+    
+    $("#goto").submit(function(event) {
+      var lats = $("#lats").val();
+      var longs = $("#longs").val();
+      var times = $("#times").val();
+      var unit = $("#unit").val();
+      var z_unit = $("#z_unit").val();
+      var speed = $("#speed").val();
+      var z_speed = $("#z_speed").val();
+    
+      mosse.push(new GoTo("GoTo",lats,longs,times,unit,z_unit,speed,z_speed));
+
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.Polyline){
+            map.removeLayer(layer);
+        }else if(layer instanceof L.Circle){
+            map.removeLayer(layer);
+        }else{}       
+       });
+                
+      var coordinates = [];
+      coordinates.push([parseFloat(lat),parseFloat(long)]);
+
+      mosse.forEach(function(arrayItem){
+        if(arrayItem.type=="GoTo"){
+            coordinates.push([parseFloat(arrayItem.latitude),parseFloat(arrayItem.longitude)]);
+        }else if(arrayItem.type=="StationKeeping"){
+
+            L.circle([parseFloat(arrayItem.latitude), parseFloat(arrayItem.longitude)], arrayItem.radius).addTo(map); 
+            
+        }else if(arrayItem.type=="Row"){
+            var i;
+            for(i=0; i<arrayItem.array.length; i++){
+               coordinates.push([parseFloat(arrayItem.array[i][0]),parseFloat(arrayItem.array[i][1])]);
+            }
+        }
+        
+      });
+;
+         
+      var pol = L.polyline(coordinates,{color: 'red',weight: 3, opacity: 0.5,  smoothFactor: 1}).addTo(map);
+     
+      $("#pop4").click();
+      return false;
+    });
+
+
+    function popup3(){
+      $("#map").attr('title', '');
+      if(mosse.length>0){
+        $('#lt').val(mosse[mosse.length-1].latitude);
+        $('#lng').val(mosse[mosse.length-1].longitude);
+      }else{
+        $('#lt').val(lat);
+        $('#lng').val(long);
+      }
+      $('#pop3').click();
+    }
+
+    var greenIcon = L.icon({
+    iconUrl: 'https://cdn2.iconfinder.com/data/icons/color-svg-vector-icons-2/512/map_marker_base-512.png',
+
+    iconSize:     [50, 57], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [24, 55], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -68] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var marker = L.marker([lat, long], {icon: greenIcon, title:device}).addTo(map).bindPopup("<b>Device: </b><b style='color:#8B0000;'>"+device+"</b><br/><a href='#' onClick='popup();'' style='cursor:pointer;'>Click for more info</a>").openPopup();
+    
+    marker.on('dblclick', function(e) {
+       popup();
+    });
+  
+    function chiama(){
+    	$('#pop5').click();
+    }
+    
+
+    function closeP(){
+        $('#pop5').click();
+    }
+  
+    function editables(type, number){
+               
+        if(type=="GoTo"){
+            $('#pop6').click();
+            var i;
+            for(i=0;i<mosse.length; i++){
+                if(i==(number-1)){
+                    $('#latss').val(mosse[i].latitude);
+                    $('#longss').val(mosse[i].longitude);
+                    $('#timess').val(mosse[i].timeout);
+                    $("#xsc").val(mosse[i].z_units);
+                    $('#z_units').val(mosse[i].z_reference);
+                    $("#esr").val(mosse[i].speed_unit);
+                    $('#z_speeds').val(mosse[i].speed_reference);
+                    $('#x').val(i);
+                }
+            }
+        }else if(type=="StationKeeping"){
+            $('#pop7').click();
+
+            var i;
+            for(i=0;i<mosse.length; i++){
+                if(i==(number-1)){
+                    $('#1').val(mosse[i].latitude);
+                    $('#2').val(mosse[i].longitude);
+                    $('#3').val(mosse[i].duration);
+                    $('#4').val(mosse[i].radius);
+                    $("#5").val(mosse[i].z_units);
+                    $('#6').val(mosse[i].z_reference);
+                    $("#7").val(mosse[i].speed_unit);
+                    $('#8').val(mosse[i].speed_reference); 
+                    $('#y').val(i);
+                }
+            }
+        }else if(type=="Row"){
+        	$('#pop8').click();
+            var i;
+            var lat1, long1, lat2, long2, lat3, long3;
+            for(i=0;i<mosse.length; i++){
+                if(i==(number-1)){
+                	var k;
+                	for(k=0;k<3;k++){
+                	   if(k==0){
+                          lat1 = mosse[i].point[k].lat;
+                          long1 = mosse[i].point[k].long;
+                	   }else if(k==1){
+                          lat2 = mosse[i].point[k].lat;
+                          long2 = mosse[i].point[k].long;
+                	   }else{
+                	   	  lat3 = mosse[i].point[k].lat;
+                          long3 = mosse[i].point[k].long;
+                	   }
+                	   $("#11").val(lat1);
+                       $("#12").val(long1);
+                       $("#13").val(lat2);
+                       $("#14").val(long2);
+                       $("#15").val(lat3);
+                       $("#16").val(long3);
+                       $('#z').val(i);
+
+                       var a = parseFloat(lat1) - parseFloat(lat2);
+                       var b = parseFloat(long1) - parseFloat(long2);
+                       var f = Math.sqrt( (a*a) + (b*b) );
+                       var aa = parseFloat(lat2) - parseFloat(lat3);
+                       var bb = parseFloat(long2) - parseFloat(long3);
+                       var ff = Math.sqrt( (aa*aa) + (bb*bb) );
+                       $("#19").val(f);
+                       $("#20").val(ff);
+
+                       var Xm = (parseFloat(lat1)+parseFloat(lat3))/2;
+                       var Ym = (parseFloat(long1)+parseFloat(long3))/2;
+                       var lat4 = (2*Xm)-parseFloat(lat2);
+                       var long4 = (2*Ym)-parseFloat(long2);
+                       $("#17").val(lat4);
+                       $("#18").val(long4);
+                	}
+                }
+            }
+        }else{
+            alert("opss");
+        }
+    }
+    class Raggio {
+      constructor(latitude,longitude,radius){
+       this.latitude = latitude;
+       this.longitude = longitude;
+       this.radius = radius;
+      }
+    }
+
+    function remove(type, number){
+    	var num = number-1;
+    	
+    	if(mosse.length>(num+1)){
+    	  if(mosse[num+1].type=="StationKeeping"){
+    		if(num==0){
+    			mosse[num+1].latitude = lat;
+    		    mosse[num+1].longitude = long;
+    		}else{
+    			mosse[num+1].latitude = mosse[num-1].latitude;
+    		    mosse[num+1].longitude = mosse[num-1].longitude;
+    		}
+    	  }
+        }
+    	mosse.splice(num,1);
+        
+    	map.eachLayer(function(layer) {
+          if (layer instanceof L.Polyline){
+            map.removeLayer(layer);
+          }else if(layer instanceof L.Circle){
+            map.removeLayer(layer);
+          }else{}       
+       });
+
+    	var coordinates = [];
+    	var circle = [];
+        coordinates.push([parseFloat(lat),parseFloat(long)]);
+        var i=0;
+        mosse.forEach(function(arrayItem){
+          i++;
+          if(arrayItem.type=="GoTo"){
+            coordinates.push([parseFloat(arrayItem.latitude),parseFloat(arrayItem.longitude)]);
+          }else if(arrayItem.type=="StationKeeping"){
+            circle.push(new Raggio(arrayItem.latitude,arrayItem.longitude, arrayItem.radius));   
+          }else if(arrayItem.type=="Row"){
+            var i;
+            for(i=1; i<arrayItem.array.length; i++){
+               coordinates.push([parseFloat(arrayItem.array[i][0]),parseFloat(arrayItem.array[i][1])]);
+            }
+          }        
+        });
+
+        if(coordinates.length>1){
+            var pol = L.polyline(coordinates,{color: 'red',weight: 3, opacity: 0.5,  smoothFactor: 1}).addTo(map);
+            map.fitBounds(pol.getBounds());
+        }
+        var k;
+        if(circle.length>0){
+        	for(k=0; k<circle.length;k++){
+              L.circle([parseFloat(circle[k].latitude), parseFloat(circle[k].longitude)],circle[k].radius).addTo(map); 
+            }
+        }
+
+       $('#pop5').click();
+    }
+
+
+    function editss(){
+        $('#pop9').click();
+        edit();
+    }
+
+    function edit(){
+        document.getElementById('tbd').innerHTML = "";
+        $('#pop5').click();
+        var inc = 1;
+        mosse.forEach(function(arrayItem){
+            document.getElementById('tbd').innerHTML += '<tr>'+
+                        '<th scope="row" style="margin-top:3%;">'+inc+'</th>'+
+                        '<th></th>'+
+                        '<th></th>'+
+                        '<td><b>'+arrayItem.type+'</b></td>'+
+                        '<th></th>'+
+                        '<th></th>'+
+                        '<th></th>'+
+                        '<th></th>'+
+                        
+                        '<td><button type="button" onclick="editables(\''+arrayItem.type+'\',\''+inc+'\');" class="btn btn-warning"><b>Edit</b></button></td>'+
+                   
+
+                         '<td><button type="button" onclick="remove(\''+arrayItem.type+'\',\''+inc+'\');" class="btn btn-danger"><b>Remove</b></button></td>'+
+                        '</tr>';
+           inc++;
+        });
+    }
+
+    function recreate(){
+    	map.eachLayer(function(layer) {
+          if (layer instanceof L.Polyline){
+            map.removeLayer(layer);
+          }else if(layer instanceof L.Circle){
+            map.removeLayer(layer);
+          }else{}       
+       });
+
+        var coordinates = [];
+    	var circle = [];
+        coordinates.push([parseFloat(lat),parseFloat(long)]);
+        mosse.forEach(function(arrayItem){
+          if(arrayItem.type=="GoTo"){
+            coordinates.push([parseFloat(arrayItem.latitude),parseFloat(arrayItem.longitude)]);
+          }else if(arrayItem.type=="StationKeeping"){
+            circle.push(new Raggio(arrayItem.latitude,arrayItem.longitude, arrayItem.radius));  
+          }else if(arrayItem.type=="Row"){
+            var i;
+            for(i=1; i<arrayItem.array.length; i++){
+               coordinates.push([parseFloat(arrayItem.array[i][0]),parseFloat(arrayItem.array[i][1])]);
+            }
+          }        
+        });
+
+        if(coordinates.length>1){
+            var pol = L.polyline(coordinates,{color: 'red',weight: 3, opacity: 0.5,  smoothFactor: 1}).addTo(map);
+            map.fitBounds(pol.getBounds());
+        }
+        var k;
+        if(circle.length>0){
+        	for(k=0; k<circle.length;k++){
+              L.circle([parseFloat(circle[k].latitude), parseFloat(circle[k].longitude)],circle[k].radius).addTo(map); 
+            }
+        }
+
+    }
+
+    function reset(){
+       map.eachLayer(function(layer) {
+         if (layer instanceof L.Polyline){
+            map.removeLayer(layer);
+         }else if(layer instanceof L.Circle){
+            map.removeLayer(layer);
+         }else if(layer instanceof L.Polygon){
+           map.removeLayer(layer);
+         }else{}       
+       });
+       mosse = [];
+    }
+
+    function result(){
+    	document.getElementById('p_text').innerHTML ="";
+        document.getElementById('btns').innerHTML ="";
+        $('#pop9').click();
+        if(mosse.length==0){
+           
+          $("#p_text").text("There aren't moves for this mission, please put new move.");
+         document.getElementById('btns').innerHTML = '<div class="btn btn-danger" style="margin-left:78%;margin-bottom:2%;margin-top:2%;width:80px;font-size:12px;height:30px;float:left;"><a href="/logout" style="color:white;">Go out</a></div>'
+          //alert("Create new move, please.");
+        }else{
+     
+          document.getElementById('p_text').innerHTML = 'Are you sure to confirm this mission? You can see all moves '+
+              '<a href="#" onClick="editss();">here</a>'+
+              '.';
+         document.getElementById('btns').innerHTML = '<button type="button" onclick="send_moves();" class="btn btn-success" style="margin-left:75%;margin-bottom:2%;margin-top:2%;width:80px;font-size:12px;height:30px;float:left;" >Confirm</button>';
+        }
+    }
+    $("#e_g").submit(function(event) {
+      $('#pop6').click(); 
+      var number = $("#x").val();
+     
+
+      mosse[number].latitude = $("#latss").val();
+      mosse[number].longitude = $("#longss").val();
+      mosse[number].timeout = $("#timess").val();
+      mosse[number].z_units = $("#xsc").val();
+      mosse[number].z_reference = $("#z_units").val();
+      mosse[number].speed_unit = $("#esr").val();
+      mosse[number].speed_reference = $("#z_speeds").val();
+
+      recreate();
+      return false;
+    });
+
+    $("#e_s").submit(function(event) {
+      $('#pop7').click(); 
+      var number = $("#y").val();
+
+
+      mosse[number].latitude = $("#1").val();
+      mosse[number].longitude = $("#2").val();
+      mosse[number].duration = $("#3").val();
+      mosse[number].radius = $("#4").val();
+      mosse[number].z_units = $("#5").val();
+      mosse[number].z_reference = $("#6").val();
+      mosse[number].speed_unit = $("#7").val();
+      mosse[number].speed_reference = $("#8").val();
+      recreate();      
+      return false;
+    });
+
+
+    $("#e_r").submit(function(event) {
+      $('#pop8').click(); 
+      var number = $("#z").val();
+
+
+      mosse.splice(number,1);
+
+      var lat1 = $("#11").val(), long1 = $("#12").val();
+      var lat2 = $("#13").val(), long2 = $("#14").val();
+      var lat3 = $("#15").val(), long3 = $("#16").val();
+      var lat4 = $("#17").val(), long4 = $("#18").val();
+
+      var point = [];
+      point.push(new Griglia(lat1,long1));
+      point.push(new Griglia(lat2,long2));
+      point.push(new Griglia(lat3,long3));
+    
+      var d1 = $("#19").val();
+      d1 = parseFloat(d1);
+      var s1 = $("#20").val();
+      s1 = parseFloat(s1);
+      var dist = $("#21").val();
+      dist = parseFloat(dist);
+      var dd = parseFloat(dist);
+      var num = $("#22").val();
+      num = parseFloat(num);
+      var num2 = $("#23").val();
+      num2 = parseFloat(num2);
+         
+      var greenIcon = L.icon({
+      iconUrl: 'https://cdn2.iconfinder.com/data/icons/color-svg-vector-icons-2/512/map_marker_base-512.png',
+      iconSize:     [30, 30],
+      iconAnchor:   [34, 35]   
+      });
+      
+      var lat0, long0;
+      if(mosse.length>0){
+        lat0 = mosse[mosse.length-1].latitude;
+        long0 = mosse[mosse.length-1].longitude;
+      }else{
+        lat0 = lat;
+        long0 = long;
+      }
+      var coor = [];
+
+      var oriz_1 = [];
+      var i;
+
+      for(i=0; i<num; i++){
+        var pX = parseFloat(lat1 - ((dist*(lat1-lat2))/d1));
+        var pY = parseFloat(long1 - ((dist*(long1-long2))/d1));
+        oriz_1.push(new Griglia(pX,pY));
+        dist+=dd;
+      }
+
+
+      var vert_1 = [];
+      var dist = $("#21").val();
+      dist = parseFloat(dist);
+      var j;
+      for(j=0; j<num2; j++){
+        var pX = parseFloat(lat2 - ((dist*(lat2-lat3))/s1));
+        var pY = parseFloat(long2 - ((dist*(long2-long3))/s1));
+        vert_1.push(new Griglia(pX,pY));
+        dist+=dd;
+      }
+
+
+
+      var oriz_2 = [];
+      var dist = $("#21").val();
+      dist = parseFloat(dist);
+      var z;
+      for(z=0; z<num; z++){
+        var pX = parseFloat(lat4 - ((dist*(lat4-lat3))/d1));
+        var pY = parseFloat(long4 - ((dist*(long4-long3))/d1));
+        oriz_2.push(new Griglia(pX,pY));
+        dist+=dd;
+      }
+
+
+      var vert_2 = [];
+      var dist = $("#21").val();
+      dist = parseFloat(dist);
+      var k;
+      for(k=0; k<num2; k++){
+        var pX = parseFloat(lat1 - ((dist*(lat1-lat4))/s1));
+        var pY = parseFloat(long1 - ((dist*(long1-long4))/s1));
+        vert_2.push(new Griglia(pX,pY));
+        dist+=dd;
+      }
+
+      var q;
+      coor.push([lat4,long4]);
+      for(q=0;q<num; q++){
+        if(q%2==0){
+           coor.push([oriz_2[q].lat,oriz_2[q].long]);
+           coor.push([oriz_1[q].lat, oriz_1[q].long]);
+        }else{
+           coor.push([oriz_1[q].lat,oriz_1[q].long]);
+           coor.push([oriz_2[q].lat, oriz_2[q].long]);
+        }
+      }
+      if(num%2==0){
+        coor.push([lat3,long3]);
+      }else{
+        coor.push([lat2,long2]);
+      }
+
+    var z;
+    if(num%2==0){
+        if(num2%2!=0){
+            for(z=num2-1;z>=0; z--){
+              if(z%2==0){
+                //alert(z);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+              }else{
+                //alert(z);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+              }
+            }
+            coor.push([lat1,long1]);
+            coor.push([lat2,long2]);
+        }else{
+            for(z=num2-1;z>=0; z--){
+              if(z%2==0){
+                //alert(z);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+              }else{
+                //alert(z);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+              }
+            }
+            coor.push([lat2,long2]);
+        }              
+    }else{
+        if(num2%2!=0){
+            for(z=0;z<num2; z++){
+              if(z%2==0){
+                //alert(z);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+              }else{
+                //alert(z);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+              }
+            }
+            coor.push([lat4,long4]);
+            coor.push([lat3,long3]);
+        }else{
+            for(z=0;z<num2; z++){
+              if(z%2==0){
+                //alert(z);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+              }else{
+                //alert(z);
+                coor.push([vert_2[z].lat,vert_2[z].long]);
+                coor.push([vert_1[z].lat,vert_1[z].long]);
+              }
+            }
+            coor.push([lat3,long3]);
+        }          
+    }
+      
+    var p = L.polyline(coor,{color: 'red',weight: 3, opacity: 0.5, smoothFactor: 1}).addTo(map);
+    map.fitBounds(p.getBounds());
+
+    map.eachLayer(function(layer) {
+        if(layer instanceof L.Polyline){
+          drawnItems.addLayer(layer);
+        }                   
+    }); 
+    
+    var distanza = $("#21").val();
+    distanza = parseFloat(distanza);
+    mosse.splice(number, 0, new Rows("Row",coor, distanza, point));
+    
+    recreate();
+    return false;
+
+      
+    });
+
+    class Moves {
+      constructor(data,user,device,moves){
+       this.data = data;
+       this.user = user;
+       this.device = device;
+       this.moves = moves;
+      }
+      
+    }
+    
+    function send_moves(){
+        $('#pop9').click();
+    	var data = new Date().toLocaleString();
+    	var myJsonString = JSON.stringify(mosse);    	
+      	socket.emit('get_mosse', new Moves(data, email, device, myJsonString));
+      	socket.on('valid', function(data){
+      		if(data==1){
+      			alert("Opss qualcosa è andato storto!!!");
+      		}else{
+                $('#pop10').click();
+      		}
+      
+        });
+      	
+    }
+
+    function mainInfo(id) {
+        if(id > 65535) {
+            document.getElementById('space').innerHTML = "<p style='color:red'>The value is too big!!!</p>"; 
+        }else{
+            document.getElementById('space').innerHTML = "";
+        }
+    }
+    function mainInfoo(id) {
+        if(id > 65535) {
+            document.getElementById('spaces').innerHTML = "<p style='color:red'>The value is too big!!!</p>"; 
+        }else{
+            document.getElementById('spaces').innerHTML = "";
+        }
+    }
+
+    function mainInfo1(id) {
+        if(id > 65535) {
+            alert("The value is too big!!! Insert new value");
+            $("#times").val("");
+            document.getElementById('space').innerHTML = "";
+        }
+    }
+    function mainInfo2(id) {
+        if(id > 65535) {
+            alert("The value is too big!!! Insert new value");
+            $("#timess").val("");
+            document.getElementById('space').innerHTML = "";
+        }
+    }
+
+</script>
+</body>
+</html>
