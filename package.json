@@ -1,0 +1,17 @@
+{
+  "name": "UIT-Tutorial-Sessions",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "*",
+    "express": "*",
+    "express-session": "*",
+    "https": "*",
+    "cassandra-driver": "*",
+    "fs": "*",
+    "socket.io": "*",
+    "ejs": "*",
+    "amqplib": "*",
+    "crypto": "*"
+  }
+}
