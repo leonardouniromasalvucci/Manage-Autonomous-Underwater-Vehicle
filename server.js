@@ -60,9 +60,8 @@ function decrypt(text){
 //const query = "CREATE KEYSPACE auv WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3}";
 //const query = "USE auv";
 //const query = "CREATE TABLE auv.login (user text, password text,  PRIMARY KEY(user, password))";
-//const query = "create table auv.missione (user text,insertion_time timestamp,device text,data text,moves text, def_lat text, def_long text,PRIMARY KEY (user,insertion_time)) WITH CLUSTERING ORDER BY (insertion_time ASC);";
+//const query = "CREATE TABLE auv.missione (user text,insertion_time timestamp,device text,data text,moves text, def_lat text, def_long text,PRIMARY KEY (user,insertion_time)) WITH CLUSTERING ORDER BY (insertion_time ASC);";
 //const query = "INSERT INTO auv.missione(user,insertion_time,device,data,moves, def_lat, def_long) VALUES ('root',dateof(now()),'d002','12-12-34','evf','22','34')";
-//"INSERT INTO auv.missione(priority, user, data, device, moves, def_lat, def_long) VALUES ("+num+" ,'"+data.user+"','"+data.data+"','"+data.device+"','"+data.moves+"','45.48878','13.489859')";
 /*client.execute(query, function (err, result) {
    console.log(err);
 });*/
