@@ -40,11 +40,11 @@ amqp.connect('amqp://172.17.0.4',function(err, newconn){
 });
 
 
-function encrypt(text){
+function hash(text){
   return md5(text);
 }
 
-//var pass = encrypt("1234");
+//var pass = hash("1234");
 //const query = "CREATE KEYSPACE auv WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3}";
 //const query = "USE auv";
 //const query = "CREATE TABLE auv.login (user text, password text,  PRIMARY KEY(user, password))";
@@ -146,7 +146,7 @@ app.get('/db',function(req,res){
 app.post('/login',function(req,res){
   req.session.email = req.body.email;
   //var pass = req.body.password;
-  var pass_de = encrypt(req.body.password);
+  var pass_de = hash(req.body.password);
   console.log(pass_de);
   //console.log(pass_de);
   const query = "SELECT * FROM auv.login WHERE user='"+req.body.email+"' AND password='"+pass_de+"'";
