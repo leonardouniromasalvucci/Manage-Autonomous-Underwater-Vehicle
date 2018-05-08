@@ -12,6 +12,6 @@
     "socket.io": "*",
     "ejs": "*",
     "amqplib": "*",
-    "crypto": "*"
+    "md5": "*"
   }
 }
